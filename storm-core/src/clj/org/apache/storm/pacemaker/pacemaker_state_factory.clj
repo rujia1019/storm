@@ -16,20 +16,20 @@
 
 (ns org.apache.storm.pacemaker.pacemaker-state-factory
   (:require [org.apache.storm.pacemaker pacemaker]
-            [backtype.storm.cluster-state [zookeeper-state-factory :as zk-factory]]
-            [backtype.storm
+            [org.apache.storm.cluster-state [zookeeper-state-factory :as zk-factory]]
+            [org.apache.storm
              [config :refer :all]
              [cluster :refer :all]
              [log :refer :all]
              [util :as util]])
-  (:import [backtype.storm.generated
+  (:import [org.apache.storm.generated
             HBExecutionException HBServerMessageType HBMessage
             HBMessageData HBPulse]
-           [backtype.storm.cluster_state zookeeper_state_factory]
-           [backtype.storm.cluster ClusterState]
+           [org.apache.storm.cluster_state zookeeper_state_factory]
+           [org.apache.storm.cluster ClusterState]
            [org.apache.storm.pacemaker PacemakerClient])
   (:gen-class
-   :implements [backtype.storm.cluster.ClusterStateFactory]))
+   :implements [org.apache.storm.cluster.ClusterStateFactory]))
 
 ;; So we can mock the client for testing
 (defn makeClient [conf]
@@ -53,6 +53,7 @@
       (create_sequential [this path data acls] (.create_sequential zk-state path data acls))
       (set_data [this path data acls] (.set_data zk-state path data acls))
       (delete_node [this path] (.delete_node zk-state path))
+      (delete_node_blobstore [this path nimbus-host-port-info] (.delete_node_blobstore zk-state path nimbus-host-port-info))
       (get_data [this path watch?] (.get_data zk-state path watch?))
       (get_data_with_version [this path watch?] (.get_data_with_version zk-state path watch?))
       (get_version [this path watch?] (.get_version zk-state path watch?))
